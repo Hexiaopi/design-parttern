@@ -9,7 +9,6 @@ func ExampleDirector() {
 	// Output: A:A1	B:B1	C:C1
 }
 
-
 func ExampleDirector_second() {
 	builder := ConcreteBuilder2{product: &Product{}}
 	var director Director

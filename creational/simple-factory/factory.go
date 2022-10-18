@@ -8,14 +8,14 @@ type Product interface {
 }
 
 const (
-	Product1 = 1+iota
+	Product1 = 1 + iota
 	Product2
 )
 
 // 工厂
-type SimpleFactory struct {}
+type SimpleFactory struct{}
 
-func (SimpleFactory)NewProduct(i int) Product {
+func (SimpleFactory) NewProduct(i int) Product {
 	switch i {
 	case Product1:
 		return &ConcreteProduct1{}

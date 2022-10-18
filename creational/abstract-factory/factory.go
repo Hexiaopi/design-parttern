@@ -18,7 +18,6 @@ type AbstractFactory interface {
 	NewProduct2() Product2
 }
 
-
 // 具体产品11
 type ConcreteProduct11 struct{}
 
@@ -27,9 +26,9 @@ func (*ConcreteProduct11) Show() {
 }
 
 // 具体产品12
-type ConcreteProduct12 struct {}
+type ConcreteProduct12 struct{}
 
-func (*ConcreteProduct12)Use(){
+func (*ConcreteProduct12) Use() {
 	fmt.Println("Product12 use")
 }
 
@@ -40,7 +39,7 @@ func (ConcreteFactory1) NewProduct1() Product1 {
 	return &ConcreteProduct11{}
 }
 
-func (ConcreteFactory1)NewProduct2() Product2{
+func (ConcreteFactory1) NewProduct2() Product2 {
 	return &ConcreteProduct12{}
 }
 
@@ -51,12 +50,11 @@ func (*ConcreteProduct21) Show() {
 	fmt.Println("Product21 show")
 }
 
-type ConcreteProduct22 struct {}
+type ConcreteProduct22 struct{}
 
-func (*ConcreteProduct22) Use(){
+func (*ConcreteProduct22) Use() {
 	fmt.Println("Product22 use")
 }
-
 
 // 具体工厂2
 type ConcreteFactory2 struct{}
@@ -65,6 +63,6 @@ func (ConcreteFactory2) NewProduct1() Product1 {
 	return &ConcreteProduct21{}
 }
 
-func (ConcreteFactory2)NewProduct2()Product2{
+func (ConcreteFactory2) NewProduct2() Product2 {
 	return &ConcreteProduct22{}
 }

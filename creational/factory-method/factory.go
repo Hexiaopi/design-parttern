@@ -12,7 +12,6 @@ type AbstractFactory interface {
 	NewProduct() Product
 }
 
-
 // 具体产品1
 type ConcreteProduct1 struct{}
 

@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-func ExamplePool(){
+func ExamplePool() {
 	connections := make([]iPoolObject, 0)
 	for i := 0; i < 3; i++ {
 		c := &connection{id: strconv.Itoa(i)}
