@@ -18,3 +18,10 @@ func TestGetInstance2(t *testing.T) {
 	}
 	wg.Wait()
 }
+
+
+func BenchmarkGetInstance2(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		GetInstance2()
+	}
+}
