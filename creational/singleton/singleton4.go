@@ -18,7 +18,7 @@ func GetInstance4() *single4 {
 		defer rwlock.Unlock()
 		if atomic.LoadUint32(&flag) == 0 {
 			fmt.Println("Creating Single Instance Now")
-			singleInstance1 = &single1{}
+			singleInstance4 = &single4{}
 			defer atomic.StoreUint32(&flag, 1)
 		} else {
 			fmt.Println("Single Instance already created-1")
