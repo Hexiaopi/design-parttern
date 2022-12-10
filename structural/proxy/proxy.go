@@ -14,18 +14,18 @@ func (r RealSubject) Request() {
 }
 
 type Proxy struct {
-	realSubject Subject
+	realSubject RealSubject
 }
 
-func (p *Proxy) preRequest() {
+func (p Proxy) preRequest() {
 	fmt.Println("pre request")
 }
 
-func (p *Proxy) postRequest() {
+func (p Proxy) postRequest() {
 	fmt.Println("post request")
 }
 
-func (p *Proxy) Request() {
+func (p Proxy) Request() {
 	p.preRequest()
 	p.realSubject.Request()
 	p.postRequest()

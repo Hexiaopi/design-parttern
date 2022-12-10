@@ -1,8 +1,9 @@
 package proxy
 
 func ExampleRequest() {
-	proxy := Proxy{realSubject: RealSubject{}}
-	proxy.Request()
+	var subject Subject
+	subject = Proxy{realSubject: RealSubject{}}
+	subject.Request()
 	// Output:
 	// pre request
 	// do request
