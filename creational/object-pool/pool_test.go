@@ -1,31 +1,43 @@
 package object_pool
 
 import (
-	"log"
-	"strconv"
+	"fmt"
 )
 
 func ExamplePool() {
-	connections := make([]iPoolObject, 0)
-	for i := 0; i < 3; i++ {
-		c := &connection{id: strconv.Itoa(i)}
-		connections = append(connections, c)
+	newConnDB := func() interface{} {
+		return "conn-db"
 	}
-	pool, err := initPool(connections)
-	if err != nil {
-		log.Fatalf("Init Pool Error: %s", err)
-	}
-	conn1, err := pool.loan()
-	if err != nil {
-		log.Fatalf("Pool Loan Error: %s", err)
-	}
-	conn2, err := pool.loan()
-	if err != nil {
-		log.Fatalf("Pool Loan Error: %s", err)
-	}
-	pool.receive(conn1)
-	pool.receive(conn2)
+	pool := NewPool(newConnDB)
+	object1 := pool.Acquire()
+	fmt.Println(len(pool.idle))
+	fmt.Println(len(pool.active))
+
+	object2 := pool.Acquire()
+	fmt.Println(len(pool.idle))
+	fmt.Println(len(pool.active))
+
+	pool.Release(object1)
+	fmt.Println(len(pool.idle))
+	fmt.Println(len(pool.active))
+
+	pool3 := pool.Acquire()
+	fmt.Println(len(pool.idle))
+	fmt.Println(len(pool.active))
+
+	pool.Release(object2)
+	pool.Release(pool3)
+	fmt.Println(len(pool.idle))
+	fmt.Println(len(pool.active))
 	// Output:
-	// Return Pool Object with ID: 0
-	// Return Pool Object with ID: 1
+	// 0
+	// 1
+	// 0
+	// 2
+	// 1
+	// 1
+	// 0
+	// 2
+	// 2
+	// 0
 }

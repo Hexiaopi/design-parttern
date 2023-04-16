@@ -1,75 +1,47 @@
 package object_pool
 
 import (
-	"fmt"
 	"sync"
 )
 
-type iPoolObject interface {
-	getID() string
-}
-
 type pool struct {
-	idle     []iPoolObject
-	active   []iPoolObject
-	capacity int
-	mutex    *sync.Mutex
+	mutex     *sync.Mutex
+	idle      []interface{}
+	active    []interface{}
+	newObject func() interface{}
 }
 
-func initPool(poolObjects []iPoolObject) (*pool, error) {
-	if len(poolObjects) == 0 {
-		return nil, fmt.Errorf("Connot create a pool of 0 length")
+func NewPool(newFunc func() interface{}) *pool {
+	return &pool{
+		mutex:     &sync.Mutex{},
+		idle:      make([]interface{}, 0),
+		active:    make([]interface{}, 0),
+		newObject: newFunc,
 	}
-	active := make([]iPoolObject, 0)
-	pool := &pool{
-		idle:     poolObjects,
-		active:   active,
-		capacity: len(poolObjects),
-		mutex:    new(sync.Mutex),
-	}
-	return pool, nil
 }
 
-func (p *pool) loan() (iPoolObject, error) {
+func (p *pool) Acquire() interface{} {
 	p.mutex.Lock()
 	defer p.mutex.Unlock()
+	var object interface{}
 	if len(p.idle) == 0 {
-		return nil, fmt.Errorf("No Pool Object Free")
+		object = p.newObject()
+	} else {
+		object = p.idle[0]
+		p.idle = p.idle[1:]
 	}
-	obj := p.idle[0]
-	p.idle = p.idle[1:]
-	p.active = append(p.active, obj)
-	return obj, nil
+	p.active = append(p.active, object)
+	return object
 }
 
-func (p *pool) remove(target iPoolObject) error {
-	currentActiveLength := len(p.active)
-	for i, obj := range p.active {
-		if obj.getID() == target.getID() {
-			p.active[currentActiveLength-1], p.active[i] = p.active[i], p.active[currentActiveLength-1]
-			p.active = p.active[:currentActiveLength-1]
-			return nil
+func (p *pool) Release(target interface{}) {
+	p.mutex.Lock()
+	defer p.mutex.Unlock()
+	p.idle = append(p.idle, target)
+	for i := range p.active {
+		if p.active[i] == target {
+			p.active = append(p.active[:i], p.active[i+1:]...)
+			break
 		}
 	}
-	return fmt.Errorf("Target poll pbject doesn't belong to the pool")
-}
-
-func (p *pool) receive(target iPoolObject) error {
-	p.mutex.Lock()
-	defer p.mutex.Unlock()
-	err := p.remove(target)
-	if err != nil {
-		return err
-	}
-	p.idle = append(p.idle, target)
-	fmt.Printf("Return Pool Object with ID: %s\n", target.getID())
-	return nil
-}
-
-type connection struct {
-	id string
-}
-
-func (c *connection) getID() string {
-	return c.id
 }
