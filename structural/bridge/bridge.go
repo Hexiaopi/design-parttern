@@ -18,20 +18,24 @@ func (ConcreateImplB) OperationImpl() {
 	fmt.Println("ConcreateImplB")
 }
 
-type Abstraction struct {
+type Abstraction interface {
+	Operation()
+}
+
+type RefineAbstractionA struct {
 	Impl Implementor
 }
 
-func (a Abstraction) Operation() {
-	fmt.Println("Abstraction")
-	a.Impl.OperationImpl()
+func (ra RefineAbstractionA) Operation() {
+	fmt.Println("RefineAbstractionA")
+	ra.Impl.OperationImpl()
 }
 
-type RefineAbstraction struct {
+type RefineAbstractionB struct {
 	Impl Implementor
 }
 
-func (ra RefineAbstraction) Operation() {
-	fmt.Println("RefineAbstraction")
+func (ra RefineAbstractionB) Operation() {
+	fmt.Println("RefineAbstractionB")
 	ra.Impl.OperationImpl()
 }

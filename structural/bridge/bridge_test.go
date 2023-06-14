@@ -3,21 +3,22 @@ package bridge
 func ExampleOperation() {
 	a := ConcreateImplA{}
 	b := ConcreateImplB{}
-	abstractA := Abstraction{Impl: a}
-	abstractA.Operation()
-	abstractB := Abstraction{Impl: b}
-	abstractB.Operation()
-	refineA := RefineAbstraction{Impl: a}
-	refineA.Operation()
-	refineB := RefineAbstraction{Impl: b}
-	refineB.Operation()
+	var abstract Abstraction
+	abstract = RefineAbstractionA{Impl: a}
+	abstract.Operation()
+	abstract = RefineAbstractionA{Impl: b}
+	abstract.Operation()
+	abstract = RefineAbstractionB{Impl: a}
+	abstract.Operation()
+	abstract = RefineAbstractionB{Impl: b}
+	abstract.Operation()
 	// Output:
-	// Abstraction
+	// RefineAbstractionA
 	// ConcreateImplA
-	// Abstraction
+	// RefineAbstractionA
 	// ConcreateImplB
-	// RefineAbstraction
+	// RefineAbstractionB
 	// ConcreateImplA
-	// RefineAbstraction
+	// RefineAbstractionB
 	// ConcreateImplB
 }
