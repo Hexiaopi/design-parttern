@@ -16,7 +16,7 @@ type Decorator struct {
 	component Component
 }
 
-func (d *Decorator) Decorator(c Component) {
+func (d *Decorator) SetComponent(c Component) {
 	d.component = c
 }
 
